@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { getTodo } from "../../redux/action";
 import { useDispatch, useSelector } from "react-redux";
 import { Modal, Deskripsi } from "../../component";
 
-function ToDoSelesai() {
+const ToDoSelesai = memo(() => {
   const dispatch = useDispatch();
   const [dataDesc, setDataDesc] = useState([]);
   const todo = useSelector((state) => state);
@@ -17,33 +17,33 @@ function ToDoSelesai() {
     dispatch(getTodo());
   }, [getTodo]);
 
-  useEffect(() => {
-    sortingDesc();
-  }, [todo]);
-
-  const sortingDesc = () => {
+  const SortingDesc = memo(() => {
     const sortDesc = todo.data.sort(
       (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
     );
-    setDataDesc(sortDesc);
-  };
+    return (
+      <>
+        {sortDesc.map(
+          (row) =>
+            row.status === 1 && (
+              <div
+                className="d-flex justify-content-between"
+                key={row.id}
+                onClick={() => handleModal(row)}
+              >
+                <div className="subtitle">{row?.title}</div>
+                <div className="subtitle">{row?.createdAt}</div>
+              </div>
+            )
+        )}
+      </>
+    );
+  });
 
   return (
     <div>
       <div className="title done">To Do List Selesai</div>
-      {dataDesc.map(
-        (row) =>
-          row.status === 1 && (
-            <div
-              className="d-flex justify-content-between"
-              key={row.id}
-              onClick={() => handleModal(row)}
-            >
-              <div className="subtitle">{row?.title}</div>
-              <div className="subtitle">{row?.createdAt}</div>
-            </div>
-          )
-      )}
+      <SortingDesc />
       <Modal
         isOpen={openModalDesk}
         toggle={() => setOpenModalDesk(!openModalDesk)}
@@ -56,6 +56,6 @@ function ToDoSelesai() {
       </Modal>
     </div>
   );
-}
+});
 
 export default ToDoSelesai;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { getTodo } from "../../redux/action";
 import { useDispatch, useSelector } from "react-redux";
 import { Modal, Deskripsi } from "../../component";
@@ -18,33 +18,33 @@ function ToDoBelumSelesai() {
     dispatch(getTodo());
   }, [getTodo]);
 
-  useEffect(() => {
-    sortingAsc();
-  }, [todo]);
-
-  const sortingAsc = () => {
+  const SortingAsc = memo(() => {
     const sortAsc = todo.data.sort(
       (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
     );
-    setDataAsc(sortAsc);
-  };
+    return (
+      <>
+        {sortAsc.map(
+          (row) =>
+            row.status === 0 && (
+              <div
+                className="d-flex justify-content-between cursor-pointer"
+                key={row.id}
+                onClick={() => handleModal(row)}
+              >
+                <div className="subtitle">{row?.title}</div>
+                <div className="subtitle">{row?.createdAt}</div>
+              </div>
+            )
+        )}
+      </>
+    );
+  });
 
   return (
     <div>
       <div className="title done">To Do List Belum Selesai</div>
-      {dataAsc.map(
-        (row) =>
-          row.status === 0 && (
-            <div
-              className="d-flex justify-content-between cursor-pointer"
-              key={row.id}
-              onClick={() => handleModal(row)}
-            >
-              <div className="subtitle">{row?.title}</div>
-              <div className="subtitle">{row?.createdAt}</div>
-            </div>
-          )
-      )}
+      <SortingAsc />
       <Modal
         isOpen={openModalDesk}
         toggle={() => setOpenModalDesk(!openModalDesk)}
