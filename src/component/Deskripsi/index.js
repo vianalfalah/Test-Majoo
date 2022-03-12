@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import { useDispatch } from "react-redux";
 import { deleteTodo } from "../../redux/action";
 import { Modal, InputTodo } from "../index";
 
-export default function Deskripsi({ data, isDelete, modalClose }) {
+const Deskripsi = memo(({ data, isDelete, modalClose }) => {
   const [showEdit, setShowEdit] = useState(false);
   const dispatch = useDispatch();
 
@@ -73,4 +73,6 @@ export default function Deskripsi({ data, isDelete, modalClose }) {
       )}
     </div>
   );
-}
+});
+
+export default Deskripsi;

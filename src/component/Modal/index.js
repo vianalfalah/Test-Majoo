@@ -1,7 +1,7 @@
 import { Modal, ModalBody } from "reactstrap";
-import React from "react";
+import React, { memo } from "react";
 
-export default function ModalDialog({ isOpen, children, ...props }) {
+const ModalDialog = memo(({ isOpen, children, ...props }) => {
   return (
     <div>
       <Modal
@@ -16,4 +16,6 @@ export default function ModalDialog({ isOpen, children, ...props }) {
       </Modal>
     </div>
   );
-}
+});
+
+export default ModalDialog;

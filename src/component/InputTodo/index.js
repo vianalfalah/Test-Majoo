@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 
 import { editTodo, createTodo } from "../../redux/action";
 import { useDispatch } from "react-redux";
-export default function Update({ data, modal, modalDesk, setAdd }) {
+
+const Update = memo(({ data, modal, modalDesk, setAdd }) => {
   const dispatch = useDispatch();
   const [error, setError] = useState({
     title: "",
@@ -103,4 +104,6 @@ export default function Update({ data, modal, modalDesk, setAdd }) {
       </button>
     </div>
   );
-}
+});
+
+export default Update;
